@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: Andy Halko, Insivia
 Donate link: 
-Tags: facebook, social media
+Tags: facebook, social media, twitter, digg
 Requires at least: 2.1
 Tested up to: 2.7.1
 Stable tag: 1.0
@@ -18,7 +18,7 @@ None Yet.
 
 == Changelog ==
 
-= 0.1 =
+= 1.0 =
 Launched!
 
 == Screenshots ==
