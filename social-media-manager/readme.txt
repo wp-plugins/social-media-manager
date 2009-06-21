@@ -10,6 +10,8 @@ Stable tag: 1.0
 
 Providing the ability to manage how social media sites see your blog or website. Manage your facebook sharing image, update twitter status for multiple accounts and view your digg submissions.  More coming soon.
 
+<a href="http://www.insivia.com/wordpress-social-media-manager">Social Media Manager</a> built by <a href="http://www.insivia.com">Insivia Marketing & Interactive Web Design</a>
+
 == Installation ==
 Place in your plugins directory, then activate.
 
