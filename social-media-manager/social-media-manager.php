@@ -2,7 +2,7 @@
 /*
 Plugin Name: Social Media Manager
 Plugin URI: http://www.insivia.com/wordpress-plugin-social-media-manager
-Description: Allows you to select an image for facebook thumbnail - will extendto handle more social media efforts.
+Description: Manage your social media brand and presence.  Currently works for facebook, twitter and digg with much more coming soon.
 Author: Andy Halko, Insivia
 Version: 1.0
 Author URI: http://www.insivia.com
