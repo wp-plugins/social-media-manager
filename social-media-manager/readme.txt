@@ -1,10 +1,10 @@
 === Plugin Name ===
 Contributors: Andy Halko, Insivia
 Donate link: 
-Tags: facebook, social media, twitter, digg
+Tags: facebook, social media, twitter, digg, youtube
 Requires at least: 2.1
-Tested up to: 2.7.1
-Stable tag: 1.0
+Tested up to: 2.8.1
+Stable tag: 2.0
 
 == Description ==
 
@@ -21,7 +21,10 @@ None Yet.
 == Changelog ==
 
 = 1.0 =
-Launched!
+Launched with twitter, facebook and digg features!
+
+= 2.0 =
+YouTube Added.
 
 == Screenshots ==
 1.  The facebook page.

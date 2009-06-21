@@ -2,7 +2,7 @@
 /*
 Plugin Name: Social Media Manager
 Plugin URI: http://www.insivia.com/wordpress-plugin-social-media-manager
-Description: Manage your social media brand and presence.  Currently works for facebook, twitter and digg with much more coming soon.
+Description: Manage your social media brand and presence.  Currently works for facebook, twitter, digg and youtube with much more coming soon.
 Author: Andy Halko, Insivia
 Version: 1.0
 Author URI: http://www.insivia.com
@@ -97,6 +97,7 @@ if ( !class_exists('social_media_manager') ) {
 			add_submenu_page("social-media-manager", "Facebook", "Facebook", 10, "smm-facebook", array(&$this,"output_facebook")); 
 			add_submenu_page("social-media-manager", "Twitter", "Twitter", 10, "smm-twitter", array(&$this,"output_twitter")); 
 			add_submenu_page("social-media-manager", "Digg", "Digg", 10, "smm-digg", array(&$this,"output_digg")); 
+			add_submenu_page("social-media-manager", "YouTube", "YouTube", 10, "smm-youtube", array(&$this,"output_youtube")); 
 		}
 		
 		/**
@@ -165,6 +166,14 @@ if ( !class_exists('social_media_manager') ) {
 			if (class_exists('smm_digg')) {
 				$smm_digg = new smm_digg($this);
 				$smm_digg->display();
+			}
+		}
+		
+		function output_youtube(){
+			include ('smm-youtube.php');
+			if (class_exists('smm_youtube')) {
+				$smm_youtube = new smm_youtube($this);
+				$smm_youtube->display();
 			}
 		}
 		
@@ -270,6 +279,9 @@ function smm_admin_head($content){
 			break;
 		case 'smm-digg':
 			$content .= '<link rel="stylesheet" href="' . WP_PLUGIN_URL . '/social-media-manager/css/digg-stylesheet.css" type="text/css" />';
+			break;
+		case 'smm-youtube':
+			$content .= '<link rel="stylesheet" href="' . WP_PLUGIN_URL . '/social-media-manager/css/youtube-stylesheet.css" type="text/css" />';
 			break;
 	}
 	echo $content;

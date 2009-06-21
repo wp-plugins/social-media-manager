@@ -1,0 +1,15 @@
+
+.youtube-item {
+    margin-bottom:10px;
+}
+.youtube-thumb {
+    float:left;
+    padding:10px;
+    text-align:center;
+    background:#fcfcfc;
+    border:1px solid #efefef;
+    margin-right:15px;
+}
+.youtube-stats {
+    padding-top:6px;
+}
