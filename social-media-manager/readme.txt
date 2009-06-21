@@ -8,4 +8,21 @@ Stable tag: 1.0
 
 == Description ==
 
-Providing the ability to manage how social media sites see your blog or website. Facebook lets visitors choose a random thumbnail from images on your site to use when sharing; well, why not define what image you want. 
+Providing the ability to manage how social media sites see your blog or website. Manage your facebook sharing image, update twitter status for multiple accounts and view your digg submissions.  More coming soon.
+
+== Installation ==
+Place in your plugins directory, then activate.
+
+== Frequently Asked Questions ==
+None Yet.
+
+== Changelog ==
+
+= 0.1 =
+Launched!
+
+== Screenshots ==
+1.  The facebook page.
+2.  The twitter page.
+3.  The menu.
+ 
