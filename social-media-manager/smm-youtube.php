@@ -108,7 +108,7 @@ class smm_youtube {
 			
 			</div>
 			<div style="padding:30px;text-align:center;">
-			Social Media Manager created by <a href="http://www.insivia.com" target="_blank">Insivia Marketing & Interactive Web Design</a>
+			Social Media Manager created by <a href="http://www.insivia.com/?utm_source=wordpress&utm_medium=referral&utm_campaign=smm-installedplugin" target="_blank">Insivia Marketing & Interactive Web Design</a>
 			</div>
 			<?php
 			
