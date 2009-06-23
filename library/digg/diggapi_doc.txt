@@ -1,0 +1,78 @@
+
+//***********************************************************************************************************************
+//* Library Description: Digg API Wrapper Library Version 1.0   - Released August 4th, 2007 
+//*
+//* Questions/comments?
+//* http://www.jaslabs.com
+//* Justin Silverton
+//* justin@jaslabs.com
+//*
+//* requirements:
+//* 	php curl extension and PHP 4 (also works with PHP 5)
+//*
+//***********************************************************************************************************************
+
+
+//get all of the stories dugg by kevin rose between 1/12/2006 and 2/20/2007.
+//limit the results to 10 and start with the first result (0).
+
+<?php
+
+require_once "diggclass.php";
+
+$diggobj = new new diggclass();
+
+//get stories that kevin rose has dugg
+$diggobj->getUserDiggs("kevinrose",$count=10,$offset=0,"1/12/2006","2/20/2007");
+
+//get multiple users diggs
+$diggobj->getUserDiggs("kevinrose,cks3",$count=10,$offset=0,"1/12/2006","2/20/2007");
+
+//get all stories diggs
+$diggobj->getDiggs("",10);
+
+//get upcoming stores diggs
+$diggobj->getDiggs("upcoming",10);
+
+//get popular stores diggs
+$diggobj->getDiggs("popular",10);
+
+//get diggs for story 2619419
+$diggobj->getDiggs("",10,0,null,null,"2619419");
+
+//get diggs for stories (2619419,2627732
+$diggobj->getDiggs("",10,0,null,null,"2619419,2627732");
+
+//get comments on all stories
+$results = $diggobj->getComments("",10,0);
+
+//get comments on upcoming stories
+$results = $diggobj->getComments("upcoming",10,0);
+
+//get comments on popular stories
+$results = $diggobj->getComments("popular",10,0);
+
+//get comments for specific story (storyid: 2631974)
+$results = $diggobj->getComments("",10,0,null,null,"2631974");
+
+//get comments for multiple stories (storyid(s): 2627244,2632687)
+$results = $diggobj->getComments("",10,0,null,null,"2627244,2632687");
+
+//get comments for multiple users (kevinrose and cks3)
+$results = $diggobj->getComments("kevinrose,cks3",10,0);
+
+//get a single comment, story id=2584331, comment id=8050949
+$results = $diggobj->getComments("",10,0,null,null,"2584331","8050949");
+
+//get all topics
+$results = $diggobj->getTopics();
+
+//get a specific topic (gadgets) given the short name of that topic
+$results = $diggobj->getTopics("gadgets");
+
+//get all users
+$results = $diggobj->getUsers();
+
+//get all stories
+$results = $diggobj->getStories();
+?>
