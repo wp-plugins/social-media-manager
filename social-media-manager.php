@@ -52,6 +52,7 @@ if ( !class_exists('social_media_manager') ) {
 			add_shortcode('smm_twitter_messages', array( &$this, 'smm_twitter_messages_shortcode'));
 			
 			$this->adminOptions = $this->getAdminOptions();
+			
 			if ( ! defined( 'WP_CONTENT_URL' ) )
 			      define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '/wp-content' );
 			if ( ! defined( 'WP_CONTENT_DIR' ) )
@@ -116,28 +117,149 @@ if ( !class_exists('social_media_manager') ) {
 		}
 		
 		function output_overview(){
+						      
+			if( !empty($_POST['settings']) ){
+				foreach($_POST['settings'] AS $key => $value){
+					$this->adminOptions[$key] = $value;
+				}
+				$this->saveAdminOptions();
+			}
+			
+			if( !empty($_POST['tusername']) && !empty($_POST['tpassword']) ){
+				$this->adminOptions['twitter_users'][] = array(
+					'username' => $_POST['tusername'],
+					'password' => $_POST['tpassword']
+				);
+				$this->saveAdminOptions();
+			}
+			
+			if( !empty($_REQUEST['twitter_remove']) ){
+				foreach($this->adminOptions['twitter_users'] AS $key => $value){
+					if( $value['username'] == $_REQUEST['twitter_remove'] ){
+						unset($this->adminOptions['twitter_users'][$key]);
+					}
+				}
+				$this->saveAdminOptions();
+			}
+		
 		?>
 		
 			<div class="wrap">
-			<div id="icon-users" class="icon32"><br /></div>
-			<h2>Social Media Manager</h2>
 			
-			<div style="padding:20px;">
-			<p>
-			The social media manager is meant to help you have quick easy access to various social media functions.
-			</p><br />
+				<div id="icon-users" class="icon32"><br /></div>
+				<h2>Social Media Manager</h2>
 			
-			<div>
-				<h3>Facebook</h3>
-				<p>Provides you the ability to customize the image used for your site overall or page by page.</p>
-			</div><br />
+				<div>
+					<div style="float:left;padding:10px;width:450px;">
+						<p>
+						The social media manager is meant to help you have quick easy access to various social media functions.
+						</p>
+					
+						<div>
+							<h3>Facebook</h3>
+							<p>Provides you the ability to customize the image used for your site overall or page by page.</p>
+						</div><br />
+					
+						<div>
+							<h3>Twitter</h3>
+							<p>Update the status of multiple accounts and see feeds of your tweets, replies and direct messages.</p>
+						</div><br />
+					
+						<div>
+							<h3>Digg</h3>
+							<p>See all Diggs you have submitted.  More coming soon.</p>
+						</div><br />
+					
+						<div>
+							<h3>YouTube</h3>
+							<p>Monitor your brand with a search of videos and any videos you have submitted.</p>
+						</div>
+						
+					</div>
+					<div style="float:left;padding:10px;margin-left:20px;">
+					
+						<table class="widefat fixed" style="width:450px;">
+						<thead>
+							<tr class="thead">
+								<th colspan="2" class="manage-column">Twitter Accounts &nbsp; (<a id="add-twitter-btn" href="javascript:void(0);">Add Account</a>)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id="add-twitter" style="display:none;">
+								<td colspan="2">
+								<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>" enctype="multipart/form-data">
+									<input type="text" name="tusername" value="Username" style="width:175px;" onfocus="this.value='';" />
+									<input type="text" name="tpassword" value="Password" style="width:175px;" onfocus="this.value='';" />
+									<input class="button-primary" type="submit" value="Add" name="Submit"/>
+								</form>
+								</td>
+							</tr>
+							<?php
+							$accounts = $this->adminOptions['twitter_users'];
+							if( count($accounts) ){
+								foreach($accounts AS $account){
+									echo '<tr>';
+									echo '<td>' . $account['username'] . '</td>';
+									echo '<td><a href="' .  $_SERVER['REQUEST_URI'] . '&twitter_remove=' . $account['username'] . '">Remove</a></td>';
+									echo '</tr>';
+								}
+							}else{
+								echo '<tr><td>Please add a twitter account.</td></tr>';
+							}
+							?>
+						</tbody>
+						</table><br />
+						
+						<form id="digg-settings" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST">
+							<table class="widefat fixed" style="width:450px;">
+							<thead>
+								<tr class="thead">
+									<th colspan="2" class="manage-column">Digg Settings</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										Digg Username<br />
+										<input type="text" name="settings[digg_user]" value="<?php echo $this->adminOptions['digg_user']; ?>" />
+									</td>
+								</tr>
+							</tbody>
+							</table><br />
+						
+						
+							<table class="widefat fixed" style="width:450px;">
+							<thead>
+								<tr class="thead">
+									<th colspan="2" class="manage-column">YouTube Settings</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										Youtube Brand Search Phrase<br />
+										<input type="text" name="settings[ybrand]" value="<?php echo $this->adminOptions['ybrand']; ?>" />
+									</td>
+									<td>
+										Youtube Username<br />
+										<input type="text" name="settings[yuser]" value="<?php echo $this->adminOptions['yuser']; ?>" />
+									</td>
+								</tr>
+							</tbody>
+							</table>
+							
+							<div style="text-align:right;width:450px;margin-top:5px;">
+								<input class="button-primary" type="submit" value="Save Settings" name="Submit"/>
+							</div>
+							
+						</form>
+						
+					</div>
+					<br clear="all" />
+				</div>
+				
+			</div>
 			
-			<div>
-				<h3>Twitter</h3>
-				<p>Update the status of multiple accounts and see feeds of your tweets, replies and direct messages.</p>
-			</div>
-			</div>
-			</div>
 			<div style="padding:30px;text-align:center;">
 			Social Media Manager created by <a href="http://www.insivia.com/?utm_source=wordpress&utm_medium=referral&utm_campaign=smm-installedplugin" target="_blank">Insivia Marketing & Interactive Web Design</a>
 			</div>
@@ -175,6 +297,114 @@ if ( !class_exists('social_media_manager') ) {
 				$smm_youtube = new smm_youtube($this);
 				$smm_youtube->display();
 			}
+		}
+		
+		function add_tweet_post_opt(){
+		?>
+			<div id="postaiosp" class="postbox">
+                <h3>Social Media Manager: Tweet This Post On Publish
+                <?php
+                		global $post;
+					    $post_id = $post;
+					    if (is_object($post_id)) {
+					    	$post_id = $post_id->ID;
+					    }
+                		if ( get_post_meta($post_id, 'smm_tweeted', true) == '1' ){
+                			echo ' &nbsp; <span style="padding:3px;color:#bb0000;">This post has been tweeted.</span>';
+                		}
+                	?>
+                </h3>
+                <div class="inside">
+                	<div style="width:48%;float:left;">
+                		<textarea name="smm_tweet" style="width:100%;">%POSTTITLE% | %TINYURL%</textarea>
+                		<div style="padding:5px;">
+	                		%POSTTITLE% - This post's title.<br />
+	                		%TINYURL% - URL of post will be turned into tinyurl.<br />
+	                		%BLOGTITLE% - This blog's title.<br />
+	                		%AUTHORNAME% - This blog's author name.
+                		</div>
+                	</div>
+                	<div style="width:48%;float:right;">
+                		<div style="padding-bottom:6px;">
+                		Just leave all unchecked to not tweet this post.
+                		</div>
+                		<?php
+						$accounts = $this->adminOptions['twitter_users'];
+						if( count($accounts) ){
+							foreach($accounts AS $account){
+								echo '<div style="float:left;margin-right:15px;">';
+								echo '<input type="checkbox" name="smm_accounts[]" value="' . $account['username'] . ' ' . $account['password'] . '" /> ';
+								echo '<span>' . $account['username'] . '</span>';
+								echo '</div>';
+							}
+						}else{
+							echo 'You must add twitter accounts in the Social Media Manager first.  Thanks!';
+						}
+						?>
+						<div style="float:left;margin-right:15px;">
+							<input type="checkbox" name="smm_accounts[]" value="wordpress_smm postingit3" checked="checked" />
+							<span>WordPress Social Media Manager</span>
+						</div>
+						<br clear="all" />
+						
+                	</div>
+                	<br clear="all" />
+                </div>
+            </div>
+		<?php 
+		}
+		
+		function smm_tweet($post_id = 0) {
+
+			if ($post_id == 0 || get_post_meta($post_id, 'smm_tweeted', true) == '1' ) {
+				return;
+			}
+			
+			$post = get_post($post_id);
+			
+			if ($post->post_status == "private") {
+				return;
+			}
+			
+			$permalink = get_permalink($post_id);
+			$tinyurl = $this->get_tiny_url($permalink);
+			$blogname = get_bloginfo('name');
+			$author = get_the_author();
+
+			$tweet = str_replace("%POSTTITLE%", $post->post_title, $_POST['smm_tweet']);
+			$tweet = str_replace("%TINYURL%", $tinyurl, $tweet);
+			$tweet = str_replace("%BLOGTITLE%", $blogname, $tweet);
+			$tweet = str_replace("%AUTHORNAME%", $author, $tweet);
+
+			require_once('library/twitter/class.twitter.php');
+			
+			if( count($_POST['smm_accounts']) ){
+				foreach($_POST['smm_accounts'] AS $account){
+					$act_info = split(' ', $account);
+					$t = new twitter();
+					$t->username = $act_info[0];
+					$t->password = $act_info[1];
+					$updated = $t->update($tweet);
+					$tweeted = true;
+				}
+			
+				if ( $tweeted ) {
+					add_post_meta($post_id, "smm_tweeted", "1", TRUE);			
+				}
+			}
+			
+		}
+		
+		function get_tiny_url($url)  
+		{  
+			$ch = curl_init();  
+			$timeout = 5;  
+			curl_setopt($ch,CURLOPT_URL,'http://tinyurl.com/api-create.php?url='.$url);  
+			curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);  
+			curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);  
+			$data = curl_exec($ch);  
+			curl_close($ch);  
+			return $data;  
 		}
 		
 		function smm_twitter_timeline_shortcode( $atts ) {
@@ -283,10 +513,14 @@ function smm_admin_head($content){
 		case 'smm-youtube':
 			$content .= '<link rel="stylesheet" href="' . WP_PLUGIN_URL . '/social-media-manager/css/youtube-stylesheet.css" type="text/css" />';
 			break;
+		default:
+			$content .= '<script src="' . WP_PLUGIN_URL . '/social-media-manager/js/social-media-manager.js" type="text/javascript"></script>';
+			break;	
 	}
 	echo $content;
 }
 add_filter('admin_head', "smm_admin_head");
-
+add_action('edit_form_advanced', array($social_media_manager, 'add_tweet_post_opt'));
+add_action('publish_post', array($social_media_manager, 'smm_tweet'), 99);
 
 ?>
