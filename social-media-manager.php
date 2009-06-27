@@ -2,9 +2,9 @@
 /*
 Plugin Name: Social Media Manager
 Plugin URI: http://www.insivia.com/wordpress-plugin-social-media-manager
-Description: Manage your social media brand and presence.  Currently works for facebook, twitter, digg and youtube with much more coming soon.
+Description: Manage & monitor your social media brand.  Facebook, twitter, digg and youtube.  Post to multiple twitter accounts easy.
 Author: Andy Halko, Insivia
-Version: 2.1
+Version: 3.0
 Author URI: http://www.insivia.com
 
 
