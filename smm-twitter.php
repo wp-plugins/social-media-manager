@@ -61,7 +61,7 @@ class smm_twitter {
 					<td style="width:420px;text-align:right;">
 						<textarea id="tstatus" name="tstatus" style="width:400px;height:60px;font-size:14px;"></textarea><br />
 						<?php if( $updated ){ ?>
-						<span style="color:#aa0000;font-weight:bolder;">Your status has been updated!</span>
+							<span style="color:#228d00;font-weight:bolder;">Your status has been updated!</span>
 						<?php } ?>
 						<input class="button-primary" type="submit" value="Update" name="Submit"/>
 					</td>
@@ -195,6 +195,7 @@ class smm_twitter {
 		
 			</div>
 			<div style="padding:30px;text-align:center;">
+			<!-- Please don't remove credit especially since this is a free plugin. -->
 			Social Media Manager created by <a href="http://www.insivia.com/?utm_source=wordpress&utm_medium=referral&utm_campaign=smm-installedplugin" target="_blank">Insivia Marketing & Interactive Web Design</a>
 			</div>
 			<?php

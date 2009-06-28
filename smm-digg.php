@@ -83,6 +83,7 @@ class smm_digg {
 		
 			</div>
 			<div style="padding:30px;text-align:center;">
+			<!-- Please don't remove credit especially since this is a free plugin. -->
 			Social Media Manager created by <a href="http://www.insivia.com/?utm_source=wordpress&utm_medium=referral&utm_campaign=smm-installedplugin" target="_blank">Insivia Marketing & Interactive Web Design</a>
 			</div>
 			<?php

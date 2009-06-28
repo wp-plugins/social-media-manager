@@ -41,7 +41,7 @@ class twitter{
 	 * More discussion at http://tinyurl.com/3xtx66
 	 * @var array
 	 */
-	var $headers=array('Expect:' => '', 'X-Twitter-Client: ' => 'Social Media Manager','X-Twitter-Client-Version: ' => 1,'X-Twitter-Client-URL: ' => 'http://www.insivia.com/wordpress-plugin-social-media-manager');
+	var $headers=array('Expect:', 'X-Twitter-Client: ' => 'Social Media Manager','X-Twitter-Client-Version: ' => 1,'X-Twitter-Client-URL: ' => 'http://www.insivia.com/wordpress-plugin-social-media-manager');
 
 	/**
 	 * @var array
@@ -80,7 +80,7 @@ class twitter{
         $postargs = array( 'status' => $status );
         if( $replying_to )
             $postargs['in_reply_to_status_id'] = (int) $replying_to; 
-
+		
 		return $this->objectify( $this->process($request, $postargs) );
 	}
 	
@@ -707,7 +707,7 @@ class twitter{
 	 * @param string $url Required. API URL to request
 	 * @param string $postargs Optional. Urlencoded query string to append to the $url
 	 */
-	function process($url,$postargs=false)
+	function process($url, $postargs=false)
 	{
 	    $url = ( $this->suppress_response_code ) ? $url . '&suppress_response_code=true' : $url;
 		$ch = curl_init($url);
@@ -716,10 +716,10 @@ class twitter{
 			curl_setopt ($ch, CURLOPT_POST, true);
 			curl_setopt ($ch, CURLOPT_POSTFIELDS, $postargs);
         }
-        
+
 		if($this->username !== false && $this->password !== false)
 			curl_setopt($ch, CURLOPT_USERPWD, $this->username.':'.$this->password );
-        
+
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, 1);
         curl_setopt($ch, CURLOPT_NOBODY, 0);
@@ -737,12 +737,12 @@ class twitter{
         $this->responseInfo=curl_getinfo($ch);
         curl_close($ch);
         
-        
+     
         if( $this->debug ) :
             $debug = preg_split("#\n\s*\n|\r\n\s*\r\n#m", $response);
             echo'<pre>' . $debug[0] . '</pre>'; exit;
         endif;
-        
+    
         if( intval( $this->responseInfo['http_code'] ) == 200 )
 			return $response;    
         else

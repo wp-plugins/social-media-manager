@@ -4,7 +4,7 @@ Donate link:
 Tags: facebook, social media, twitter, digg, youtube
 Requires at least: 2.1
 Tested up to: 2.8.1
-Stable tag: 3.0
+Stable tag: 3.1.0
 
 == Description ==
 
@@ -30,7 +30,10 @@ YouTube Feeds Added.
 Fixed so the plugin could be installed by plugin manager
 
 = 3.0 = 
-Added ability to tweet your new post directly from the post page on update.  Also added a settings interfaceon main plugin page.
+Added ability to tweet your new post directly from the post page on update.  Also added a settings interface on main plugin page.
+
+= 3.1.0 = 
+Adde suppot for Tumblr stand alone and directly from posts.  Also going to start changing version scheme.
 
 == Screenshots ==
 1.  The facebook page.

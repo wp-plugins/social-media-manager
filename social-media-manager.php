@@ -2,9 +2,9 @@
 /*
 Plugin Name: Social Media Manager
 Plugin URI: http://www.insivia.com/wordpress-plugin-social-media-manager
-Description: Manage & monitor your social media brand.  Facebook, twitter, digg and youtube.  Post to multiple twitter accounts easy.
+Description: Manage & monitor your social media brand.  Facebook, twitter, digg, youtube & tumblr.  Post to multiple twitter accounts easy.
 Author: Andy Halko, Insivia
-Version: 3.0
+Version: 3.1.0
 Author URI: http://www.insivia.com
 
 
@@ -99,6 +99,7 @@ if ( !class_exists('social_media_manager') ) {
 			add_submenu_page("social-media-manager", "Twitter", "Twitter", 10, "smm-twitter", array(&$this,"output_twitter")); 
 			add_submenu_page("social-media-manager", "Digg", "Digg", 10, "smm-digg", array(&$this,"output_digg")); 
 			add_submenu_page("social-media-manager", "YouTube", "YouTube", 10, "smm-youtube", array(&$this,"output_youtube")); 
+			add_submenu_page("social-media-manager", "Tumblr", "Tumblr", 10, "smm-tumblr", array(&$this,"output_tumblr")); 
 		}
 		
 		/**
@@ -173,6 +174,11 @@ if ( !class_exists('social_media_manager') ) {
 						<div>
 							<h3>YouTube</h3>
 							<p>Monitor your brand with a search of videos and any videos you have submitted.</p>
+						</div><br />
+					
+						<div>
+							<h3>Tumblr</h3>
+							<p>Submit text entries to tumblr - other content types coming.</p>
 						</div>
 						
 					</div>
@@ -246,6 +252,27 @@ if ( !class_exists('social_media_manager') ) {
 									</td>
 								</tr>
 							</tbody>
+							</table><br />
+						
+						
+							<table class="widefat fixed" style="width:450px;">
+							<thead>
+								<tr class="thead">
+									<th colspan="2" class="manage-column">Tumblr Settings</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										Username<br />
+										<input type="text" name="settings[tumblr_account][username]" value="<?php echo $this->adminOptions['tumblr_account']['username']; ?>" />
+									</td>
+									<td>
+										Password<br />
+										<input type="text" name="settings[tumblr_account][password]" value="<?php echo $this->adminOptions['tumblr_account']['password']; ?>" />
+									</td>
+								</tr>
+							</tbody>
 							</table>
 							
 							<div style="text-align:right;width:450px;margin-top:5px;">
@@ -261,6 +288,7 @@ if ( !class_exists('social_media_manager') ) {
 			</div>
 			
 			<div style="padding:30px;text-align:center;">
+			<!-- Please don't remove credit especially since this is a free plugin. -->
 			Social Media Manager created by <a href="http://www.insivia.com/?utm_source=wordpress&utm_medium=referral&utm_campaign=smm-installedplugin" target="_blank">Insivia Marketing & Interactive Web Design</a>
 			</div>
 			
@@ -299,18 +327,29 @@ if ( !class_exists('social_media_manager') ) {
 			}
 		}
 		
+		function output_tumblr(){
+			include ('smm-tumblr.php');
+			if (class_exists('smm_tumblr')) {
+				$smm_tumblr = new smm_tumblr($this);
+				$smm_tumblr->display();
+			}
+		}
+		
 		function add_tweet_post_opt(){
 		?>
 			<div id="postaiosp" class="postbox">
-                <h3>Social Media Manager: Tweet This Post On Publish
+                <h3>Social Media Manager: Distribute This Post On Publish
                 <?php
                 		global $post;
 					    $post_id = $post;
 					    if (is_object($post_id)) {
 					    	$post_id = $post_id->ID;
 					    }
-                		if ( get_post_meta($post_id, 'smm_tweeted', true) == '1' ){
-                			echo ' &nbsp; <span style="padding:3px;color:#bb0000;">This post has been tweeted.</span>';
+                		if ( get_post_meta($post_id, 'smm_tweeted', true) > 1 ){
+                			echo ' &nbsp; <span style="padding:3px;color:#bb0000;">Has been tweeted.</span>';
+                		}
+                		if ( get_post_meta($post_id, 'smm_tumbled', true) > 1 ){
+                			echo ' &nbsp; <span style="padding:3px;color:#bb0000;">Has been tumbled.</span>';
                 		}
                 	?>
                 </h3>
@@ -326,7 +365,7 @@ if ( !class_exists('social_media_manager') ) {
                 	</div>
                 	<div style="width:48%;float:right;">
                 		<div style="padding-bottom:6px;">
-                		Just leave all unchecked to not tweet this post.
+                		<b>Twitter:</b>
                 		</div>
                 		<?php
 						$accounts = $this->adminOptions['twitter_users'];
@@ -347,6 +386,15 @@ if ( !class_exists('social_media_manager') ) {
 						</div>
 						<br clear="all" />
 						
+						<div style="padding-top:10px;padding-bottom:6px;">
+                			<b>Tumblr:</b> 
+                		</div>
+						<?php if( !empty($this->adminOptions['tumblr_account']['username']) ){ ?>
+                			<input type="checkbox" name="smm_tumblr" value="1" /> Post to Tumblr (<?php echo $this->adminOptions['tumblr_account']['username']; ?>)
+                		<?php }else{ ?>
+                			Please setup a tumblr account.
+                		<?php } ?>
+						
                 	</div>
                 	<br clear="all" />
                 </div>
@@ -356,10 +404,11 @@ if ( !class_exists('social_media_manager') ) {
 		
 		function smm_tweet($post_id = 0) {
 
-			if ($post_id == 0 || get_post_meta($post_id, 'smm_tweeted', true) == '1' ) {
+			if ($post_id == 0 ) {
 				return;
 			}
 			
+			$tweets = 0;
 			$post = get_post($post_id);
 			
 			if ($post->post_status == "private") {
@@ -369,15 +418,15 @@ if ( !class_exists('social_media_manager') ) {
 			$permalink = get_permalink($post_id);
 			$tinyurl = $this->get_tiny_url($permalink);
 			$blogname = get_bloginfo('name');
-			$author = get_the_author();
+			$author = get_userdata($post->post_author);
 
 			$tweet = str_replace("%POSTTITLE%", $post->post_title, $_POST['smm_tweet']);
 			$tweet = str_replace("%TINYURL%", $tinyurl, $tweet);
 			$tweet = str_replace("%BLOGTITLE%", $blogname, $tweet);
-			$tweet = str_replace("%AUTHORNAME%", $author, $tweet);
+			$tweet = str_replace("%AUTHORNAME%", $author->display_name, $tweet);
 
+			// Twitter
 			require_once('library/twitter/class.twitter.php');
-			
 			if( count($_POST['smm_accounts']) ){
 				foreach($_POST['smm_accounts'] AS $account){
 					$act_info = split(' ', $account);
@@ -386,11 +435,36 @@ if ( !class_exists('social_media_manager') ) {
 					$t->password = $act_info[1];
 					$updated = $t->update($tweet);
 					$tweeted = true;
+					$tweets += 1;
 				}
 			
 				if ( $tweeted ) {
-					add_post_meta($post_id, "smm_tweeted", "1", TRUE);			
+					$tweet_count = get_post_meta($post_id, 'smm_tweeted', true) + $tweets;
+					add_post_meta($post_id, "smm_tweeted", $tweet_count, TRUE);			
 				}
+			}
+			
+			// tumblr
+			if( isset($_POST['smm_tumblr']) ){
+				
+				require_once('library/tumblr/class.tumblr.php');
+				$tumblr = new Tumblr();
+				$user = $this->adminOptions['tumblr_account']['username'];
+				$pass = $this->adminOptions['tumblr_account']['password'];
+				$tumblr->init($user, $pass, 'Social Media Manager');
+				
+				$data = array(
+					'type' => 'regular',
+				    'title' => $post->post_title,
+				    'body' => $tweet
+				);
+				$tumbled = $tumblr->post($data);
+				
+				if ( $tumbled ) {
+					$tumblr_count = get_post_meta($post_id, 'smm_tumbled', true) + 1;
+					add_post_meta($post_id, "smm_tumbled", $tumblr_count, TRUE);			
+				}
+				
 			}
 			
 		}
@@ -512,6 +586,9 @@ function smm_admin_head($content){
 			break;
 		case 'smm-youtube':
 			$content .= '<link rel="stylesheet" href="' . WP_PLUGIN_URL . '/social-media-manager/css/youtube-stylesheet.css" type="text/css" />';
+			break;
+		case 'smm-tumblr':
+			$content .= '<link rel="stylesheet" href="' . WP_PLUGIN_URL . '/social-media-manager/css/tumblr-stylesheet.css" type="text/css" />';
 			break;
 		default:
 			$content .= '<script src="' . WP_PLUGIN_URL . '/social-media-manager/js/social-media-manager.js" type="text/javascript"></script>';
